@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Java-基本引用类型的使用 | 不蒸馒头争口气</title><meta name="description" content="Randomr.nextInt(); 随机数范围为整个int r.nextInt(3);    指定随机范围 ，左闭右开区间[0,3)    0,1,2 r.nextInt(10)+1   指定范围为 [1,10 ] ArrayList数组长度不可变 ，ArrayList长度可变  为泛型，也就是装在集合当中的所有元素，全都是统一的什么类型，泛型只能是引用类型，不能是基本类型,泛型只能是引用类型，"><meta name="keywords" content="Java,ArrayList,String"><meta name="author" content="laden"><meta name="copyright" content="laden"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lqhao.gitee.io/2020/07/10/2/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="preconnect" href="//zz.bdstatic.com"/><meta property="og:type" content="article"><meta property="og:title" content="Java-基本引用类型的使用"><meta property="og:url" content="http://lqhao.gitee.io/2020/07/10/2/"><meta property="og:site_name" content="不蒸馒头争口气"><meta property="og:description" content="Randomr.nextInt(); 随机数范围为整个int r.nextInt(3);    指定随机范围 ，左闭右开区间[0,3)    0,1,2 r.nextInt(10)+1   指定范围为 [1,10 ] ArrayList数组长度不可变 ，ArrayList长度可变  为泛型，也就是装在集合当中的所有元素，全都是统一的什么类型，泛型只能是引用类型，不能是基本类型,泛型只能是引用类型，"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2020-07-10T11:48:44.759Z"><meta property="article:modified_time" content="2020-07-22T13:33:45.449Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="prev" title="Java-日期、System类、Collection集合" href="http://lqhao.gitee.io/2020/07/13/1/"><link rel="next" title="Java-面向对象笔记" href="http://lqhao.gitee.io/2020/07/10/1/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: true,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true
+  }</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://gitee.com/lqhao/img-bed/raw/master/img-page/04232036663275.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">20</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Random"><span class="toc-number">1.</span> <span class="toc-text">Random</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ArrayList"><span class="toc-number">2.</span> <span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String"><span class="toc-number">3.</span> <span class="toc-text">String</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static关键字"><span class="toc-number">4.</span> <span class="toc-text">static关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Arrays"><span class="toc-number">5.</span> <span class="toc-text">Arrays</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Math"><span class="toc-number">6.</span> <span class="toc-text">Math</span></a></li></ol></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">不蒸馒头争口气</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Java-基本引用类型的使用</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2020-07-10 19:48:44"><i class="far fa-calendar-alt fa-fw"></i> 发表于 2020-07-10</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-07-22 21:33:45"><i class="fas fa-history fa-fw"></i> 更新于 2020-07-22</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"> <span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta__icon"></i><span>字数总计:</span><span class="word-count">1.2k</span><span class="post-meta__separator">|</span><i class="far fa-clock fa-fw post-meta__icon"></i><span>阅读时长: 4 分钟</span></span></div><div class="meta-thirdline"><span class="post-meta-pv-cv"><span class="post-meta__separator">|</span><i class="far fa-eye fa-fw post-meta__icon"></i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="Random"><a href="#Random" class="headerlink" title="Random"></a>Random</h2><p>r.nextInt(); 随机数范围为整个int</p>
+<p>r.nextInt(3);    指定随机范围 ，左闭右开区间[0,3)    0,1,2</p>
+<p>r.nextInt(10)+1   指定范围为 [1,10 ]</p>
+<h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList<E></E></h2><p>数组长度不可变 ，ArrayList长度可变</p>
+<p><E> 为泛型，也就是装在集合当中的所有元素，全都是统一的什么类型，泛型只能是引用类型，不能是基本类型,泛型只能是引用类型，不能是基本类型，如果想要存放基本类型，必须使用基本类型的包装类</E></p>
+<p>直接打印得到的不是地址值，是空[ ]</p>
+<ul>
+<li>ArrayList 常用方法<ul>
+<li>public Boolean add(E e): 向集合中追加元素</li>
+<li>public E get(int index): 从集合中获取指定位置元素</li>
+<li>public E remove(int index): 从集合中删除指定位置元素</li>
+<li>public int size(): 获取集合的尺寸长度</li>
+</ul>
+</li>
+</ul>
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><ul>
+<li><font color="red">字符串一旦被创建，内容永不可变</font></li>
+<li>正因为字符串不可变，所以字符串可以共享使用</li>
+<li>字符串效果上相当于char[ ] 字符数组，但底层原理是byte[ ]字节数组</li>
+<li>三种构造方法<ul>
+<li>public String（）：创建一个空白字符串</li>
+<li>public String（char[ ] array）: 根据字符数组的内童，来创建对应的字符串</li>
+<li>public String（byte[ ] array）：根据字节数组的内容，来创建对应的字符串<ul>
+<li>byte[ ]  array = {97,98,99}       String str = new String(array);</li>
+</ul>
+</li>
+<li>直接创建 String str = “hello”;</li>
+</ul>
+</li>
+<li>字符串常量池：只有程序当中直接写上的双引号字符串，就在字符串常量池中</li>
+<li>对于基本类型来说， ==是进行【数值】的比较</li>
+<li>对于引用类型来说， ==是【地址值】的比较<img src= "/img/loading.gif" data-src="/2020/07/10/2/%E5%AD%97%E7%AC%A6%E4%B8%B2.png" alt="字符串"></li>
+</ul>
+<ul>
+<li>public boolean equals (Object obj)  参数可以是任何对象，只有参数是一个字符串且内容相同才会返回true，否则为false      </li>
+<li>注意事项<ul>
+<li>任何对象都能用Object进行接收</li>
+<li>推荐把字符串写在变量前  即  “abc”.equals(str)<img src= "/img/loading.gif" data-src="/2020/07/10/2/equals.png" alt="equals"></li>
+</ul>
+</li>
+<li>public boolean equalsIgnoreCase(String str), 忽略大小写进行比较</li>
+<li>String相关常用方法<ul>
+<li>public int length（）获取字符串字符个数</li>
+<li>public String concat(String str)   将当前字符串和参数字符串拼接成为返回值新的字符串，地址与之前字符串不同</li>
+<li>public char charAt(int index)   获取指定索引位置的单个字符（索引从0开始）</li>
+<li>public int indexOf（String str）查找参数字符串在本字符串中首次出现的索引位置，如果没有返回-1</li>
+<li>字符串截取<ul>
+<li>public String subString（int index）截取某一位置到结束，返回新字符串</li>
+<li>public String subString （int begin , int end）截取从begin开始，一直到end结束 [begin, end)</li>
+</ul>
+</li>
+<li>转换相关方法<ul>
+<li>public  char[ ] toCharArray() : 将当前字符串拆分成字符数组作为返回值</li>
+<li>public  byte[ ] getBytes(): 获得当前字符串底层的字节数组</li>
+<li>public String replace （CharSequence  old String, CharSequence newString）:将所有出现的老字符串的指定内容替换成新内容，返回替换之后的结果新字符串。<ul>
+<li>CharSeqence 可以接收字符串类型</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分割字符串<ul>
+<li>public String[ ] split (String regex) 按照参数的规则，将字符串切分成若干部分，返回字符串数组   regex其实是一个正则表达式</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h2><ul>
+<li><p>如果一个成员变量使用了static关键字，那么这个变量不再属于对象自己，而是属于所在类。多个对象共享同一份数据。</p>
+</li>
+<li><p><img src= "/img/loading.gif" data-src="/2020/07/10/2/static.png" alt="static"></p>
+</li>
+<li><p>一旦用static修饰成员方法，那么这个方法就成了静态方法，静态方法不属于实例，只属于类。</p>
+<ul>
+<li>调用</li>
+<li><img src= "/img/loading.gif" data-src="/2020/07/10/2/%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95.png" alt="静态方法"></li>
+<li>对于本类当中的静态方法可直接调用</li>
+</ul>
+</li>
+<li><p>方法调用</p>
+<ul>
+<li>成员方法<ul>
+<li>成员方法可以访问静态变量</li>
+</ul>
+</li>
+<li>静态方法<ul>
+<li>静态方法可以访问静态变量，但不能访问成员变量，因为内存中【先】有的静态内容，【后】有的非静态内容</li>
+<li>静态方法不能使用this</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>静态变量使用的内存图</p>
+<ul>
+<li><img src= "/img/loading.gif" data-src="/2020/07/10/2/static%E5%86%85%E5%AD%98%E5%9B%BE.png" alt="static内存图"></li>
+</ul>
+</li>
+<li><p>静态代码块</p>
+<ul>
+<li><p>格式</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> 类名称</span>&#123;</span><br><span class="line">   staiic&#123;</span><br><span class="line">      <span class="comment">//静态代码块内容</span></span><br><span class="line">         &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>特点：当第一次用到本类时，静态代码块执行唯一的一次</li>
+<li>用途，用来一次性地对静态成员变量进行赋值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h2><ul>
+<li>是一个与数组相关的工具类，里面提供了大量的静态方法，用来实现数组常见的操作</li>
+<li>public static String toString （数组）:  将参数数组变成字符串（按照默认格式：[元素1,元素2，元素3]）</li>
+<li>public static void sort(数组)： 按照默认升序,对数组元素进行排序 <ul>
+<li>数字，字母升序</li>
+<li>如果是自定义类型，那么定义的类需要有Comparable或者Comparator接口</li>
+</ul>
+</li>
+</ul>
+<h2 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h2><ul>
+<li>public static double abs(double num）：获取绝对值</li>
+<li>public static double ceil（double num）：向上取整</li>
+<li>public static double floor（double num）：向下取整</li>
+<li>public static long round（double num）：四舍五入</li>
+</ul>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">laden</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lqhao.gitee.io/2020/07/10/2/">http://lqhao.gitee.io/2020/07/10/2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lqhao.gitee.io" target="_blank">不蒸馒头争口气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/ArrayList/">ArrayList</a><a class="post-meta__tags" href="/tags/String/">String</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><button class="reward-button"><i class="fas fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="https://gitee.com/lqhao/img-bed/raw/master/img-page/weixinpay.jpg" alt="微信" onclick="window.open('https://gitee.com/lqhao/img-bed/raw/master/img-page/weixinpay.jpg')"/><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="post-qr-code__img" src="https://gitee.com/lqhao/img-bed/raw/master/img-page/alipay.jpg" alt="支付宝" onclick="window.open('https://gitee.com/lqhao/img-bed/raw/master/img-page/alipay.jpg')"/><div class="post-qr-code__desc">支付宝</div></li></ul></div></button></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/07/13/1/"><img class="prev-cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java-日期、System类、Collection集合</div></div></a></div><div class="next-post pull-right"><a href="/2020/07/10/1/"><img class="next-cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java-面向对象笔记</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/07/25/2/" title="Java-JDBC连接池、JDBCTemplate"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-25</div><div class="relatedPosts_title">Java-JDBC连接池、JDBCTemplate</div></div></a></div><div class="relatedPosts_item"><a href="/2020/07/08/1/" title="Java-API-说明文档推荐"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-08</div><div class="relatedPosts_title">Java-API-说明文档推荐</div></div></a></div><div class="relatedPosts_item"><a href="/2020/07/20/2/" title="Java-Stream流"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-20</div><div class="relatedPosts_title">Java-Stream流</div></div></a></div></div></div></article></main><footer id="footer" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2020 By laden</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://jerryc.me/" target="_blank" rel="noopener">blog</a>!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><button id="readmode" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font_plus" title="放大字体"><i class="fas fa-plus"></i></button><button id="font_minus" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script id="ribbon_piao" mobile="true" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script></body></html>

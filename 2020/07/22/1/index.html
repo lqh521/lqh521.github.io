@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Java-反射、注解 | 不蒸馒头争口气</title><meta name="description" content="Junit测试:  测试分类 黑盒测试:不需要写代码,给输入值,看程序是否能够输出期望的值 白盒测试:需要写代码.关注程序具体的执行流程   Junit使用: 白盒测试 步骤 定义一个测试类(测试用例) 建议: 测试类名使用被测试类+Test 包名:xxx.xxx.xxx.test   定义测试方法: 可以独立运行 建议: 方法名: test+测试方法名 返回值: void 参数列表: 空参"><meta name="keywords" content="Java,注解,反射"><meta name="author" content="laden"><meta name="copyright" content="laden"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lqhao.gitee.io/2020/07/22/1/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="preconnect" href="//zz.bdstatic.com"/><meta property="og:type" content="article"><meta property="og:title" content="Java-反射、注解"><meta property="og:url" content="http://lqhao.gitee.io/2020/07/22/1/"><meta property="og:site_name" content="不蒸馒头争口气"><meta property="og:description" content="Junit测试:  测试分类 黑盒测试:不需要写代码,给输入值,看程序是否能够输出期望的值 白盒测试:需要写代码.关注程序具体的执行流程   Junit使用: 白盒测试 步骤 定义一个测试类(测试用例) 建议: 测试类名使用被测试类+Test 包名:xxx.xxx.xxx.test   定义测试方法: 可以独立运行 建议: 方法名: test+测试方法名 返回值: void 参数列表: 空参"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2020-07-22T12:08:41.178Z"><meta property="article:modified_time" content="2020-07-22T13:41:04.936Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="prev" title="MySQL-基础" href="http://lqhao.gitee.io/2020/07/23/1/"><link rel="next" title="Java-Stream流" href="http://lqhao.gitee.io/2020/07/20/2/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: true,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true
+  }</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://gitee.com/lqhao/img-bed/raw/master/img-page/04232036663275.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">20</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#反射"><span class="toc-number">1.</span> <span class="toc-text">反射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注解"><span class="toc-number">2.</span> <span class="toc-text">注解</span></a></li></ol></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">不蒸馒头争口气</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Java-反射、注解</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2020-07-22 20:08:41"><i class="far fa-calendar-alt fa-fw"></i> 发表于 2020-07-22</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-07-22 21:41:04"><i class="fas fa-history fa-fw"></i> 更新于 2020-07-22</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"> <span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta__icon"></i><span>字数总计:</span><span class="word-count">2.6k</span><span class="post-meta__separator">|</span><i class="far fa-clock fa-fw post-meta__icon"></i><span>阅读时长: 9 分钟</span></span></div><div class="meta-thirdline"><span class="post-meta-pv-cv"><span class="post-meta__separator">|</span><i class="far fa-eye fa-fw post-meta__icon"></i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>Junit测试:</p>
+<ul>
+<li>测试分类<ol>
+<li>黑盒测试:不需要写代码,给输入值,看程序是否能够输出期望的值</li>
+<li>白盒测试:需要写代码.关注程序具体的执行流程</li>
+</ol>
+</li>
+<li>Junit使用: 白盒测试<ul>
+<li>步骤<ol>
+<li>定义一个测试类(测试用例)<ul>
+<li>建议:</li>
+<li>测试类名使用被测试类+Test</li>
+<li>包名:xxx.xxx.xxx.test</li>
+</ul>
+</li>
+<li>定义测试方法: 可以独立运行<ul>
+<li>建议:</li>
+<li>方法名: test+测试方法名</li>
+<li>返回值: void</li>
+<li>参数列表: 空参</li>
+</ul>
+</li>
+<li>给方法加注解@Test</li>
+<li>点击小灯泡导入Jnuit环境依赖</li>
+</ol>
+</li>
+<li>判定结果<ul>
+<li>红色: 失败</li>
+<li>绿色: 成功</li>
+<li>一般使用断言操作处理结果,Assert类中的assertXXX方法  assertEquals(期望的结果,程序运算的结果),若两个数不同显示红色</li>
+</ul>
+</li>
+<li>注解@Before 被修饰的方法会在测试方法之前被自动执行,常用于初始化资源</li>
+<li>注解@After  被修饰的方法会在测试方法之后被自动执行,常用于释放资源</li>
+</ul>
+</li>
+</ul>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>框架设计的灵魂</p>
+<p>反射:将类的各个部分封装成其他对象,这就是反射机制</p>
+<ul>
+<li><p>好处:</p>
+<ul>
+<li>可以在程序的运行过程中,操作这些对象</li>
+<li>可以解耦,提高程序的可扩展性</li>
+</ul>
+</li>
+<li><p>获取class类对象的三种方式</p>
+<ul>
+<li><p>Class.forName(“全类名”) : 将字节码文件加载进内存,返回class</p>
+<ul>
+<li>多用于配置文件,将类名可以定义在配置文件中,来读取文件加载类</li>
+</ul>
+</li>
+<li><p>通过类名的属性class来获取</p>
+<ul>
+<li>多用于参数的传递</li>
+</ul>
+</li>
+<li><p>对象.getclass() : 这个方法在Object类中定义的</p>
+<ul>
+<li>多由于获取对象的字节码的方式</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//1.Class.forName("全类名") : 将字节码文件加载进内存,返回class</span></span><br><span class="line">    Class cls1 = Class.forName(<span class="string">"domain.Person"</span>);</span><br><span class="line">    System.out.println(cls1);</span><br><span class="line">    <span class="comment">//2.通过类名的属性class来获取</span></span><br><span class="line">    Class&lt;Person&gt; cls2 = Person<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">    System.out.println(cls2);</span><br><span class="line">    <span class="comment">//对象.getclass()</span></span><br><span class="line">    Person p = <span class="keyword">new</span> Person();</span><br><span class="line">    Class cls3 = p.getClass();</span><br><span class="line">    System.out.println(cls3);</span><br><span class="line">    <span class="comment">//==比较三个对象</span></span><br><span class="line">    System.out.println(cls1==cls2);<span class="comment">//true</span></span><br><span class="line">    System.out.println(cls2==cls3);<span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>结论:</p>
+<ul>
+<li><strong>同一个字节码文件(*.class)在一次程序运行过程中,只会被加载一次,不论通过哪种方式获取的Class对象,都是同一个</strong></li>
+</ul>
+</li>
+<li><p>Class对象的方法</p>
+<ul>
+<li><p>获取的功能</p>
+<ul>
+<li>获取成员变量们<ul>
+<li>Filed[]  getFileds()    获取所有public修饰的成员变量<ul>
+<li>Field: 成员变量<ol>
+<li>对指定obj对象设置value值  void set(Object obj, Object value)  </li>
+<li>对指定obj对象获取值  Object get(Object obj)  </li>
+<li>忽略访问权限修饰符安全的检查  setAccessible(true) 暴力反射</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>Field getField(String name)  获取指定名称的public修饰的成员变量</li>
+<li>Field[] getDeclaredFields()  获取所有成员变量,不考虑修饰符,且能设置所有成员变量</li>
+<li>Field getDeclaredFields(String name)  获取单个成员变量,不考虑修饰符,且能设置该成员变量的值</li>
+</ul>
+</li>
+<li>获取构造方法们<ul>
+<li>Constructor<T> getConstructor(Class&lt;?&gt;… parameterTypes)  <ul>
+<li>Constructor:构造方法:<ul>
+<li>T newInstance(Object… initargs)    用来创建对应的对象</li>
+<li>如果构造使用空参构造来构造对象,操作可以简化:使用Class中的newInstance()方法来创建对象</li>
+</ul>
+</li>
+</ul>
+</T></li>
+<li>Constructor&lt;?&gt;[] getConstructors()</li>
+<li>Constructor<T> getDeclaredConstructor(Class&lt;?&gt;… parameterTypes)  </T></li>
+<li>Constructor&lt;?&gt;[] getDeclaredConstructors()  </li>
+</ul>
+</li>
+<li>获取成员方法们<ul>
+<li>Method getMethod(String name, Class&lt;?&gt;… parameterTypes)  <ul>
+<li>Method:方法对象<ul>
+<li>Object invoke(Object obj, Object… args)  执行方法</li>
+<li>String getName() 获取方法名</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Method[] getMethods()  </li>
+<li>Method getDeclaredMethod(String name, Class&lt;?&gt;… parameterTypes)  </li>
+<li>Method[] getDeclaredMethods()  </li>
+</ul>
+</li>
+<li>获取类名<ul>
+<li>String getName()  </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取成员变量们</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//获取Person的Class对象</span></span><br><span class="line">        Class personClass = Person<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">        <span class="comment">//获取成员变量们</span></span><br><span class="line">        Field[] fields = personClass.getFields();</span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            System.out.println(field);</span><br><span class="line">        &#125;</span><br><span class="line">        Field a = personClass.getField(<span class="string">"a"</span>);</span><br><span class="line">        Person p = <span class="keyword">new</span> Person();</span><br><span class="line">        <span class="comment">//用set()给p对象的a设置变量</span></span><br><span class="line">        a.set(p,<span class="string">"123"</span>);</span><br><span class="line">        <span class="comment">//用get()获取p对象的a值</span></span><br><span class="line">        Object value = a.get(p);</span><br><span class="line">        System.out.println(value);</span><br><span class="line">        Field[] declaredFields = personClass.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span> (Field declaredField : declaredFields) &#123;</span><br><span class="line">            System.out.println(declaredField);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//可以获取私有成员变量,且设置成员变量</span></span><br><span class="line">        Field d = personClass.getDeclaredField(<span class="string">"d"</span>);</span><br><span class="line">        <span class="comment">//忽略访问权限修饰符安全的检查</span></span><br><span class="line">        d.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        d.set(p,<span class="string">"aaa"</span>);</span><br><span class="line">        System.out.println(p);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取构造方法们</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//获取Person的Class对象</span></span><br><span class="line">    Class personClass = Person<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">    <span class="comment">//Constructor&lt;T&gt; getConstructor(Class&lt;?&gt;... parameterTypes)</span></span><br><span class="line">    Constructor constructor = personClass.getConstructor(String<span class="class">.<span class="keyword">class</span>, <span class="title">int</span>.<span class="title">class</span>)</span>;</span><br><span class="line">    <span class="comment">//使用newInstance(Object... initargs)  用来构造带参的对象</span></span><br><span class="line">    Object objperson = constructor.newInstance(<span class="string">"zhangsan"</span>, <span class="number">23</span>);</span><br><span class="line">    System.out.println(objperson);</span><br><span class="line">    <span class="comment">//使用newInstance(Object... initargs)  用来构造空参的对象</span></span><br><span class="line">    Object o1 = constructor.newInstance();</span><br><span class="line">    System.out.println(o1);</span><br><span class="line">    <span class="comment">//直接使用Class对象构造空参对象</span></span><br><span class="line">    Object o = personClass.newInstance();</span><br><span class="line">    System.out.println(o);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取成员方法们</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//获取Person的Class对象</span></span><br><span class="line">    Class personClass = Person<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">    <span class="comment">//获取空参成员方法</span></span><br><span class="line">    Method eat_method = personClass.getMethod(<span class="string">"eat"</span>);</span><br><span class="line">    <span class="comment">//创建一个对象</span></span><br><span class="line">    Person p =<span class="keyword">new</span> Person();</span><br><span class="line">    <span class="comment">//执行对象中的eat方法</span></span><br><span class="line">    eat_method.invoke(p);</span><br><span class="line">    <span class="comment">//获取带参成员方法</span></span><br><span class="line">    Method eat_method2 = personClass.getMethod(<span class="string">"eat"</span>, String<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    <span class="comment">//执行带参成员方法</span></span><br><span class="line">    eat_method2.invoke(p,<span class="string">"饭"</span>);</span><br><span class="line">    <span class="comment">//获取所有public修饰方法</span></span><br><span class="line">    Method[] methods = personClass.getMethods();</span><br><span class="line">    <span class="keyword">for</span> (Method method : methods) &#123;</span><br><span class="line">        System.out.println(method);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获取类名</span></span><br><span class="line">    String className = personClass.getName();</span><br><span class="line">    <span class="comment">//包名.类名</span></span><br><span class="line">    System.out.println(className);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>案例:</p>
+<ul>
+<li><p>需求: 写一个”框架”,不改变该类的任何代码的情况下,可以帮我们创建任意类的对象,并且执行任意的方法</p>
+</li>
+<li><p>实现:</p>
+<ol>
+<li>配置文件</li>
+<li>反射</li>
+</ol>
+</li>
+<li><p>步骤</p>
+<ol>
+<li>将需要创建的对象的全类名和需要执行的方法定义载配置文件中</li>
+<li>在程序中加载读取配置文件</li>
+<li>使用反射技术来加载类文件进内存</li>
+<li>创建对象</li>
+<li>执行方法</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">框架类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReflectTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">          不能改变该类的任何代码,可以创建任意类的对象,可以执行任意方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">//创建Properties对象</span></span><br><span class="line">        Properties pro = <span class="keyword">new</span> Properties();</span><br><span class="line">        <span class="comment">//加载配置文件,转换为集合</span></span><br><span class="line">        <span class="comment">//获取文件class目录下的配置文件</span></span><br><span class="line">        ClassLoader classLoader = ReflectTest<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span>;</span><br><span class="line">        InputStream is = classLoader.getResourceAsStream(<span class="string">"properties"</span>);</span><br><span class="line">        pro.load(is);</span><br><span class="line">        <span class="comment">//获取配置文件中定义的数据</span></span><br><span class="line">        String className = pro.getProperty(<span class="string">"className"</span>);</span><br><span class="line">        String methodName = pro.getProperty(<span class="string">"methodName"</span>);</span><br><span class="line">        <span class="comment">//加载该类进内存</span></span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(className);</span><br><span class="line">        Object obj = cls.newInstance();</span><br><span class="line">        Method method = cls.getMethod(methodName);</span><br><span class="line">        method.invoke(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><ul>
+<li><p>概念描述:</p>
+<ul>
+<li>说明程序的.给计算机看的</li>
+<li>JDK1.5之后的新特性</li>
+<li>使用注解: @注解名称</li>
+</ul>
+</li>
+<li><p>作用分类</p>
+<ul>
+<li>编写文档: 通过代码里标识的注解生成文档[生成doc文档]</li>
+<li>代码分析: 通过代码里标识的元数据对代码进行分析[使用反射]</li>
+<li>编译检查: 通过代码里标识的元数据让编译器能实现基本的编译检查[Override]</li>
+</ul>
+</li>
+<li><p>JDK中预定义的一些注解</p>
+<ul>
+<li>@Override: 检查被改注解标注的方法是否是继承自父类/接口的</li>
+<li>@Deprecated: 该注解标注的内容,已过时</li>
+<li>@SuppressWamings(“all”): 压制所有警告,一般传递参数all</li>
+</ul>
+</li>
+<li><p>自定义注解</p>
+<ul>
+<li><p>格式:</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">元注解</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> 注解名&#123;</span><br><span class="line">    <span class="comment">//属性列表</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>本质</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注解本质上就是一个接口,该接口默认继承Annotation接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyAnno</span> <span class="keyword">extends</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">annotation</span>.<span class="title">Annotation</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>属性:接口中的抽象方法</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnno &#123;</span><br><span class="line">    <span class="comment">//称这个抽象方法为注解的属性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">show</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line">要求:</span><br><span class="line">	<span class="number">1</span>.属性的返回值类型可以有</span><br><span class="line">        基本数据类型,String,枚举,注解,以上类型的数组,其他均不行包括<span class="keyword">void</span></span><br><span class="line">        <span class="keyword">public</span> <span class="meta">@interface</span> MyAnno &#123;</span><br><span class="line">            <span class="function"><span class="keyword">int</span> <span class="title">age</span><span class="params">()</span></span>;<span class="comment">//返回值为基本数据类型</span></span><br><span class="line">            <span class="function">String <span class="title">name</span><span class="params">()</span></span>;<span class="comment">//返回值为String</span></span><br><span class="line">        	 <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> "张三"</span>;<span class="comment">//返回值为String,默认赋值为张三</span></span><br><span class="line">            <span class="function">Test_enum <span class="title">show3</span><span class="params">()</span></span>;<span class="comment">//返回值为枚举类型</span></span><br><span class="line">            <span class="function">MyAnno2 <span class="title">show4</span><span class="params">()</span></span>;<span class="comment">//返回值为注解</span></span><br><span class="line">            String[] show5();<span class="comment">//返回值为以上类型数组</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">enum</span> Test_enum&#123;</span><br><span class="line">            p1,p2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="meta">@interface</span> MyAnno2&#123;</span><br><span class="line">        &#125;</span><br><span class="line">	 <span class="number">2</span>.定义了属性,在使用时需要给属性赋值</span><br><span class="line">        <span class="meta">@MyAnno</span>(age = <span class="number">12</span>,name=<span class="string">"张三"</span>)</span><br><span class="line">        <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line">	 <span class="number">3</span>.定义属性时,使用<span class="keyword">default</span>关键字给属性默认初始化,则取用默认值</span><br><span class="line">  	 <span class="number">4</span>.如果只有一个属性需要赋值,并且属性的名称是value,则value可以省略,直接写值即可          </span><br><span class="line">        <span class="keyword">public</span> <span class="meta">@interface</span> MyAnno &#123;</span><br><span class="line">            <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span></span>;<span class="comment">//属性名称为value,使用时直接写值即可</span></span><br><span class="line">        &#125;</span><br><span class="line">	    <span class="meta">@MyAnno</span>(<span class="number">12</span>)</span><br><span class="line">        <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line">	 <span class="number">5</span>.枚举数组赋值,注解类型赋值,数组类型赋值(数组中只有一个值,则&#123;&#125;可以省略)</span><br><span class="line">        <span class="meta">@MyAnno</span>(show3=Test_enum.p1,show4=<span class="meta">@MyAnno</span>2,show5=&#123;<span class="string">"aa"</span>,<span class="string">"bb"</span>,<span class="string">"cc"</span>&#125;)</span><br><span class="line">        <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>元注解: 用于描述注解的注解</p>
+<ul>
+<li><p>@Target: 描述注解能够作用的位置</p>
+<ul>
+<li>ElementType的取值<ul>
+<li>TYPE: 表示注解只能作用于类上</li>
+<li>METHOD: 表示该注解只能作用于方法上</li>
+<li>FIELD: 表示该注解只能作用于成员变量上</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>@Retention: 描述注解被保留的阶段</p>
+<ul>
+<li>@Retention(RetentionPolicy.RUNTIME):表示当前被描述的注解会保留到class字节码文件中,并被JVM读取到</li>
+</ul>
+</li>
+<li><p>@Documented: 描述注解是否被抽取到api文档中</p>
+</li>
+<li><p>@Inherited: 描述注解是否被子类继承,加表示继承</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//表示该MyAnno3注解可以作用于类上,方法上,成员变量上</span></span><br><span class="line"><span class="meta">@Target</span>(value=&#123;ElementType.TYPE,ElementType.METHOD,ElementType.FIELD&#125;)</span><br><span class="line"><span class="comment">//表示当前被描述的注解会保留到class字节码文件中,并被JVM读取到</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="comment">//表示该注解可以被保留到doc文档中</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="comment">//表示该注解会自动被子类继承</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnno3 &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>在程序中使用(解析)注解:获取注解中定义的属性值</p>
+<ol>
+<li>获取注解使用位置的对象 (Class,Method,Filed)</li>
+<li>获取指定的注解<ul>
+<li>getAnnotation(Class)</li>
+</ul>
+</li>
+<li>调用注解中的抽象方法获取配置的属性值</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Pro &#123;</span><br><span class="line">    <span class="function">String <span class="title">className</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">String <span class="title">methodName</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Pro</span>(className = <span class="string">"domain.Person"</span>,methodName = <span class="string">"eat"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReflectTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">          不能改变该类的任何代码,可以创建任意类的对象,可以执行任意方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">//1.解析注解</span></span><br><span class="line">        <span class="comment">//获取该类的字节码文件对象</span></span><br><span class="line">        Class&lt;ReflectTest&gt; reflectTestClass = ReflectTest<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">        <span class="comment">//2.获取上边的注解对象</span></span><br><span class="line">        <span class="comment">// 其实就是在内存中生成了一个该注解接口的子类实现对象</span></span><br><span class="line">        Pro an = reflectTestClass.getAnnotation(Pro<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="comment">//3.调用注解对象中定义的抽象方法,获取返回值</span></span><br><span class="line">        String className = an.className();</span><br><span class="line">        String methodName = an.methodName();</span><br><span class="line">        <span class="comment">//加载该类进内存</span></span><br><span class="line">        Class cls = Class.forName(className);</span><br><span class="line">        Object obj = cls.newInstance();</span><br><span class="line">        Method method = cls.getMethod(methodName);</span><br><span class="line">        method.invoke(obj);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>小结:</p>
+<ul>
+<li>大多数时候,会使用注解,而不是自定义注解</li>
+<li>注解给编译器,给解析程序用</li>
+<li>注解并不是程序的一部分,可以理解为注解就是一个标签</li>
+</ul>
+</li>
+</ul>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">laden</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://lqhao.gitee.io/2020/07/22/1/">http://lqhao.gitee.io/2020/07/22/1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://lqhao.gitee.io" target="_blank">不蒸馒头争口气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/%E6%B3%A8%E8%A7%A3/">注解</a><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%B0%84/">反射</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><button class="reward-button"><i class="fas fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="https://gitee.com/lqhao/img-bed/raw/master/img-page/weixinpay.jpg" alt="微信" onclick="window.open('https://gitee.com/lqhao/img-bed/raw/master/img-page/weixinpay.jpg')"/><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="post-qr-code__img" src="https://gitee.com/lqhao/img-bed/raw/master/img-page/alipay.jpg" alt="支付宝" onclick="window.open('https://gitee.com/lqhao/img-bed/raw/master/img-page/alipay.jpg')"/><div class="post-qr-code__desc">支付宝</div></li></ul></div></button></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/07/23/1/"><img class="prev-cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MySQL-基础</div></div></a></div><div class="next-post pull-right"><a href="/2020/07/20/2/"><img class="next-cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java-Stream流</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/07/25/2/" title="Java-JDBC连接池、JDBCTemplate"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-25</div><div class="relatedPosts_title">Java-JDBC连接池、JDBCTemplate</div></div></a></div><div class="relatedPosts_item"><a href="/2020/07/08/1/" title="Java-API-说明文档推荐"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-08</div><div class="relatedPosts_title">Java-API-说明文档推荐</div></div></a></div><div class="relatedPosts_item"><a href="/2020/07/20/2/" title="Java-Stream流"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-20</div><div class="relatedPosts_title">Java-Stream流</div></div></a></div></div></div></article></main><footer id="footer" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2020 By laden</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://jerryc.me/" target="_blank" rel="noopener">blog</a>!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><button id="readmode" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font_plus" title="放大字体"><i class="fas fa-plus"></i></button><button id="font_minus" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script id="ribbon_piao" mobile="true" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script></body></html>
